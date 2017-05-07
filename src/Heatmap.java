@@ -21,18 +21,17 @@ public class Heatmap {
     }
     
     /**
-     * »æÖÆheatmap
-     * @param width Éú³ÉµÄÍ¼Æ¬µÄ¿í¶È
-     * @param height Éú³ÉµÄÍ¼Æ¬µÄ¸ß¶È
-     * @param radius heatmapµãµÄ°ë¾¶
-     * @param opcatity heatmapµãµÄÍ¸Ã÷¶È
-     * @param points heatmapµãµÄÊı¾İ¼¯
-     * @return BufferedImage, ²ÊÉ«µÄheatmap
+     * ç»˜åˆ¶heatmap
+     * @param width ç”Ÿæˆçš„å›¾ç‰‡çš„å®½åº¦
+     * @param height ç”Ÿæˆçš„å›¾ç‰‡çš„é«˜åº¦
+     * @param radius heatmapç‚¹çš„åŠå¾„
+     * @param points heatmapç‚¹çš„æ•°æ®é›†
+     * @return BufferedImage, å½©è‰²çš„heatmap
      */
-    public BufferedImage render(int width, int height, int radius, int opcatity, ArrayList<Point2D> points) {
-        BufferedImage palette = createPalette(); // µ÷É«°å
-        BufferedImage grayHeatmap = null; // heatmap»Ò¶ÈÍ¼
-        BufferedImage colorfulHeatmap = null; // heatmap²ÊÉ«Í¼
+    public BufferedImage render(int width, int height, int radius, ArrayList<Point2D> points) {
+        BufferedImage palette = createPalette(); // è°ƒè‰²æ¿
+        BufferedImage grayHeatmap = null; // heatmapç°åº¦å›¾
+        BufferedImage colorfulHeatmap = null; // heatmapå½©è‰²å›¾
 
         try {
             grayHeatmap = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -43,14 +42,14 @@ public class Heatmap {
                 int x = (int) p.getX();
                 int y = (int) p.getY();
 
-                // »æÖÆ»Ò¶ÈÍ¼
+                // ç»˜åˆ¶ç°åº¦å›¾
                 graphics2d.setPaint(new RadialGradientPaint(new Point2D.Double(x, y), radius, new float[] { 0f, 1.0f },
                         new Color[] { new Color(0, 0, 0, 120), new Color(0, 0, 0, 0) }));
 
                 graphics2d.fillArc(x - radius, y - radius, 2 * radius, 2 * radius, 0, 360);
             }
 
-            // »æÖÆ²ÊÉ«heatmap
+            // ç»˜åˆ¶å½©è‰²heatmap
             ColorModel cm = ColorModel.getRGBdefault();
             colorfulHeatmap = new BufferedImage(grayHeatmap.getWidth(), grayHeatmap.getHeight(),
                     BufferedImage.TYPE_INT_ARGB);
@@ -83,7 +82,7 @@ public class Heatmap {
 
     }
 
-    // Éú³Éµ÷É«°å
+    // ç”Ÿæˆè°ƒè‰²æ¿
     private BufferedImage createPalette() {
         BufferedImage palette = null;
         try {
