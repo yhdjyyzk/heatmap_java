@@ -16,12 +16,12 @@ public class Test {
         ArrayList<Point2D> points = new ArrayList<Point2D>();
         int width = 500;
         int height = 500;
-        int radius = 20;
+        int radius = 50;
         int opacity = 255;
         String heatmapName = "heatmap.png";
         
         // generate data set.
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 100; i++) {
             double x = new Random().nextGaussian() * width;
             double y = new Random().nextGaussian() * height;
             Point2D.Double p = new Point2D.Double(x, y);
@@ -29,7 +29,7 @@ public class Test {
             points.add(p);
         }
 
-        BufferedImage im = render.render(width, height, radius, opacity, points);
+        BufferedImage im = render.render(width, height, radius, points);
 
         try {
             ImageIO.write(im, "png", new File(heatmapName));

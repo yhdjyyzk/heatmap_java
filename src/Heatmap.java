@@ -44,7 +44,7 @@ public class Heatmap {
 
                 // 绘制灰度图
                 graphics2d.setPaint(new RadialGradientPaint(new Point2D.Double(x, y), radius, new float[] { 0f, 1.0f },
-                        new Color[] { new Color(0, 0, 0, 120), new Color(0, 0, 0, 0) }));
+                        new Color[] { new Color(0, 0, 0, 50), new Color(0, 0, 0, 0) }));
 
                 graphics2d.fillArc(x - radius, y - radius, 2 * radius, 2 * radius, 0, 360);
             }
@@ -93,11 +93,11 @@ public class Heatmap {
                             new Color(255, 255, 0), new Color(255, 0, 0) }));
 
             graphics2d.fillRect(0, 0, 256, 1);
-            try {
-                ImageIO.write(palette, "png", new File("palette.png"));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            // try {
+            //     ImageIO.write(palette, "png", new File("palette.png"));
+            // } catch (Exception e) {
+            //     System.out.println(e.getMessage());
+            // }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
