@@ -16,12 +16,12 @@ public class Test {
         ArrayList<Point2D> points = new ArrayList<Point2D>();
         int width = 500;
         int height = 500;
-        int radius = 50;
+        int radius = 20;
         int opacity = 255;
         String heatmapName = "heatmap.png";
         
         // generate data set.
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             double x = new Random().nextGaussian() * width;
             double y = new Random().nextGaussian() * height;
             Point2D.Double p = new Point2D.Double(x, y);

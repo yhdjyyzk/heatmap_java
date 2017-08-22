@@ -21,20 +21,20 @@ public class Heatmap {
     }
     
     /**
-     * 绘制heatmap
-     * @param width 生成的图片的宽度
-     * @param height 生成的图片的高度
-     * @param radius heatmap点的半径
-     * @param points heatmap点的数据集
-     * @return BufferedImage, 彩色的heatmap
+     * @param width
+     * @param height
+     * @param radius
+     * @param points
+     * @return BufferedImage
      */
     public BufferedImage render(int width, int height, int radius, ArrayList<Point2D> points) {
-        BufferedImage palette = createPalette(); // 调色板
-        BufferedImage grayHeatmap = null; // heatmap灰度图
-        BufferedImage colorfulHeatmap = null; // heatmap彩色图
+        BufferedImage palette = createPalette();
+        BufferedImage grayHeatmap = null;
+        BufferedImage colorfulHeatmap = null;
 
         try {
             grayHeatmap = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            grayHeatmap = getBoxBlurImage(grayHeatmap, 3);
 
             Graphics2D graphics2d = grayHeatmap.createGraphics();
 
@@ -42,14 +42,12 @@ public class Heatmap {
                 int x = (int) p.getX();
                 int y = (int) p.getY();
 
-                // 绘制灰度图
                 graphics2d.setPaint(new RadialGradientPaint(new Point2D.Double(x, y), radius, new float[] { 0f, 1.0f },
                         new Color[] { new Color(0, 0, 0, 50), new Color(0, 0, 0, 0) }));
 
                 graphics2d.fillArc(x - radius, y - radius, 2 * radius, 2 * radius, 0, 360);
             }
 
-            // 绘制彩色heatmap
             ColorModel cm = ColorModel.getRGBdefault();
             colorfulHeatmap = new BufferedImage(grayHeatmap.getWidth(), grayHeatmap.getHeight(),
                     BufferedImage.TYPE_INT_ARGB);
@@ -82,7 +80,6 @@ public class Heatmap {
 
     }
 
-    // 生成调色板
     private BufferedImage createPalette() {
         BufferedImage palette = null;
         try {
@@ -105,4 +102,43 @@ public class Heatmap {
 
         return palette;
     }
+
+    private BufferedImage getBoxBlurImage(BufferedImage image, int radius) {
+      BufferedImage newImage = new BufferedImage(image.getWidth(),
+         image.getHeight(), image.getType());
+      ColorModel cm = ColorModel.getRGBdefault();
+
+      for (int i = 0; i < image.getWidth(); i++) {
+         for (int j = 0; j < image.getHeight(); j++) {
+            int startX = i - radius < 0 ? 0 : i - radius;
+            int endX = i + radius > image.getWidth() ? image.getWidth() : i + radius;
+
+            int startY = j - radius < 0 ? 0 : j - radius;
+            int endY = j + radius > image.getHeight() ? image.getHeight() : j + radius;
+
+            int rSum = 0;
+            int gSum = 0;
+            int bSum = 0;
+            int aSum = 0;
+
+            for (int h = startX; h < endX; h++) {
+               for (int k = startY; k < endY; k++) {
+                  int rgb = image.getRGB(h, k);
+                  rSum += cm.getRed(rgb);
+                  gSum += cm.getGreen(rgb);
+                  bSum += cm.getBlue(rgb);
+                  aSum += cm.getAlpha(rgb);
+               }
+            }
+
+            int count = (int) Math.pow(radius * 2, 2);
+
+            newImage.setRGB(i, j, new Color(rSum / count,
+               gSum / count, bSum / count,
+               aSum / count).getRGB());
+         }
+      }
+
+      return newImage;
+   }
 }
